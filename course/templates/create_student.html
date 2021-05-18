@@ -1,0 +1,164 @@
+<!-- {% extends 'base.html' %} -->
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- Success Message -->
+{% if messages %}
+   {% for message in messages %}
+   <div class="alert alert-success" role="alert">
+       {{ message }}
+   </div>
+   {% endfor %}
+ {% endif %}
+Create Student
+
+
+<div class="form-group">
+  <form  method="post">
+      {% csrf_token %}
+      {{ form.as_p}}
+      <button class= "btn btn-secondary" name="button"> Create </button>
+  </form>
+
+{% for course in classes %}
+  <p> {{course}}</p>
+{% endfor %}
+
+
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
+<body>
+
+<h2>Classes</h2>
+
+<div class="row">
+  <div class="column" style="background-color:#aaa;">
+    <h2>AM</h2>
+    <h3>Academic/Creative</h3>
+    <ul>
+      {% for course in classes %}
+      {% if course.1 == 'AM' %}
+        {% if course.2 == 'Academic' or course.2 == 'Creative' %}
+
+          <li> {{course.0 }}</li>
+        {% endif %}
+
+      {% endif %}
+      {% endfor %}
+    </ul>
+
+
+
+
+
+  </div>
+  <div class="column" style="background-color:#bbb;">
+    <h2>PM</h2>
+    <h3>Athletic</h3>
+
+    <ul>
+      {% for course in classes %}
+        {% if course.1 == 'PM' and course.2 == 'Athletic' %}
+          <li> {{course.0 }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="column" style="background-color:#aaa;">
+    <h3>Athletic</h3>
+    <ul>
+      {% for course in classes %}
+      {% if course.1 == 'AM' and course.2 == 'Athletic' %}
+          <li> {{course.0 }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+  </div>
+
+  <div class="column" style="background-color:#bbb;">
+    <h3>Academic/Creative</h3>
+    <ul>
+      {% for course in classes %}
+        {% if course.1 == 'PM' %}
+          {% if course.2 == 'Academic' or course.2 == 'Creative' %}
+
+          <li> {{course.0 }}</li>
+          {% endif %}
+
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>
+
+Selection
+<div class="row">
+  <div class="column" >
+
+    <label for="AM">Choose an AM class:</label>
+    <select name="AM_class" id="AM_class">
+      {% for course in classes %}
+        {% if course.1 == 'AM' %}
+
+        <option value={course.0}>{{course.0}}</option>
+        {% endif %}
+      {% endfor %}
+
+    </select>
+
+  </div>
+
+  <div class="column" >
+    <label for="PM">Choose an PM class:</label>
+    <select name="PM_class" id="PM_class">
+      {% for course in classes %}
+        {% if course.1 == 'PM' %}
+
+        <option value={course.0}>{{course.0}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+
+  </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+  var s = document.getElementsByName('AM_class')[0];
+  var text = s.options[s.selectedIndex].text;
+  console.log(text);
+
+</script>
+</body>
+</html>

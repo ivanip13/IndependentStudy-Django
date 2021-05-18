@@ -1,0 +1,226 @@
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- Success Message -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    /* Create two equal columns that sits next to each other */
+    .column {
+      flex: 50%;
+      padding: 10px;
+      height: 300px; /* Should be removed. Only for demonstration */
+    }
+    </style>
+  </head>
+
+
+  <body>
+<div class="container">
+
+    {% if messages %}
+       {% for message in messages %}
+       <div class="alert alert-success" role="alert">
+           {{ message }}
+       </div>
+
+       {% endfor %}
+     {% endif %}
+
+    <div class="form-group">
+      <form  method="post" id='my_form'>
+          {% csrf_token %}
+          {{ student.as_p}}
+
+          <h2>Select Available Classes</h2>
+
+          {% for course in classes %}
+            <p> {{course}}</p>
+          {% endfor %}
+  </div>
+
+      <body>
+
+          <h2>Classes</h2>
+
+          <div class="row">
+            <div class="column" style="background-color:#aaa;">
+              <h2>AM</h2>
+              <h3>Academic/Creative</h3>
+              <ul>
+                {% for course in classes %}
+                {% if course.1 == 'AM' %}
+                  {% if course.2 == 'Academic' or course.2 == 'Creative' %}
+
+                    <li> {{course.0 }}</li>
+                  {% endif %}
+
+                {% endif %}
+                {% endfor %}
+              </ul>
+
+
+
+
+
+            </div>
+            <div class="column" style="background-color:#bbb;">
+              <h2>PM</h2>
+              <h3>Athletic</h3>
+
+              <ul>
+                {% for course in classes %}
+                  {% if course.1 == 'PM' and course.2 == 'Athletic' %}
+                    <li> {{course.0 }}</li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+
+
+
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="column" style="background-color:#aaa;">
+              <h3>Athletic</h3>
+              <ul>
+                {% for course in classes %}
+                {% if course.1 == 'AM' and course.2 == 'Athletic' %}
+                    <li> {{course.0 }}</li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+
+            </div>
+
+            <div class="column" style="background-color:#bbb;">
+              <h3>Academic/Creative</h3>
+              <ul>
+                {% for course in classes %}
+                  {% if course.1 == 'PM' %}
+                    {% if course.2 == 'Academic' or course.2 == 'Creative' %}
+
+                    <li> {{course.0 }}</li>
+                    {% endif %}
+
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+
+          </div>
+
+          Selection
+          <div class="row">
+            <div class="column" >
+
+              <label for="AM"> Choose an AM class:</label>
+              <select name="AM_class" id="AM_class">
+                <!-- <option value='blank'> </option> -->
+
+                {% for course in classes %}
+                  {% if course.1 == 'AM' %}
+
+                  <option value={course.0}>{{course.0}}</option>
+                  {% endif %}
+                {% endfor %}
+
+              </select>
+
+            </div>
+
+            <div class="column" >
+              <label for="PM">Choose an PM class:</label>
+              <select name="PM_class" id="PM_class">
+                {% for course in classes %}
+                  {% if course.1 == 'PM' %}
+
+                  <option value={course.0}>{{course.0}}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+
+            </div>
+
+          </div>
+<div class="container">
+
+  AM Class
+  {{ signup.class_AM}}
+
+  PM Class
+  {{ signup.class_PM}}
+</div>
+
+
+
+
+          <button class= "btn btn-secondary" name="button"> Create </button>
+      </form>
+</div>
+
+  </body>
+
+  <script type="text/javascript">
+
+       var s = document.getElementsByName('AM_class')[0];
+       console.log(s);
+
+       var text = s.options[s.selectedIndex].text;
+       console.log(text);
+       document.getElementById('AM_class').value = text;
+       document.getElementById('PM_class').value = text;
+
+       document.getElementById('AM_class').onchange = function() {
+
+         // console.log(document.getElementById('AM_class').text);
+         var am = document.getElementById('AM_class');
+         var am_result =am.options[am.selectedIndex].text;
+         // var result = e.value;
+         console.log(am_result);
+
+         // document.getElementById('selected_am_class').value = result;
+         document.getElementById('id_signup-class_AM').value = am_result;
+
+         // document.getElementById("id_class_AM").value = "developer";
+         // document.getElementById('am_class').value = result;
+         // my_form.am_class.value = am_result;
+       }
+       document.getElementById('PM_class').onchange = function() {
+
+         // console.log(document.getElementById('AM_class').text);
+         var pm = document.getElementById('PM_class');
+         var pm_result = pm.options[pm.selectedIndex].text;
+         // var result = e.value;
+         console.log(pm_result);
+
+         // document.getElementById('selected_am_class').value = result;
+         document.getElementById('id_signup-class_PM').value = pm_result;
+
+         // document.getElementById("id_class_AM").value = "developer";
+         // document.getElementById('am_class').value = result;
+         // my_form.am_class.value = am_result;
+       }
+
+
+       // function myNewFunction(sel) {
+       //   alert(sel.options[sel.selectedIndex].text);
+       //   console.log(sel.options[sel.selectedIndex].text);
+       // }
+
+
+     </script>
+
+</html>

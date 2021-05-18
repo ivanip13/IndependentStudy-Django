@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <h1>    {{ class_name }} </h1>
+
+      <table class = 'table'>
+        <tr>
+          <th scope="col">Student Name</th>
+          <th scope="col">AM Class</th>
+          <th scope="col">PM Class</th>
+          <th scope="col">Age</th>
+        </tr>
+
+        <!-- {{ signup.class_PM}} -->
+        {% for element in signup %}
+
+        <tr>
+
+          <td>{{ element.student}}</td>
+          <td>{{ element.class_AM}}</td>
+          <td>{{ element.class_PM}}</td>
+          <td>{{ element.student.age}}</td>
+
+
+        </tr>
+        {% endfor %}
+
+
+        </table>
+
+  {% endblock %}

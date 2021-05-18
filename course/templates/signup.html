@@ -1,0 +1,315 @@
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- Success Message -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    /* Create two equal columns that sits next to each other */
+    .column {
+      flex: 50%;
+      padding: 10px;
+      height: 300px; /* Should be removed. Only for demonstration */
+    }
+
+    #column-select {
+      height: 50px;
+    }
+    </style>
+  </head>
+
+
+      <body>
+    <div class="container">
+
+        {% if messages %}
+           {% for message in messages %}
+           <div class="alert alert-success" role="alert">
+               {{ message }}
+           </div>
+           {% endfor %}
+         {% endif %}
+
+        <div class="form-group">
+          <form  method="post" id='my_form'>
+              {% csrf_token %}
+              {{ student.as_p}}
+
+              <div class="container">
+                <input type="hidden" id="myVar" name="variable" value="{{ classes |safe}}">
+              </div>
+              <h2>Classes with Inventory</h2>
+              {% for course in classes %}
+                {{course}}<br>
+              {% endfor %}
+      </div>
+
+      <h2>Available Classes Given Age and Inventory</h2>
+
+      <div class="row">
+        <div class="column" style="background-color:#aaa;">
+          <h2>AM</h2>
+          <h3>Academic/Creative</h3>
+          <div id="AM_Class_Academic_Creative_JS">
+          </div>
+        </div>
+        <div class="column" style="background-color:#bbb;">
+          <h2>PM</h2>
+          <h3>Athletic</h3>
+          <div id="PM_Class_Athletic_JS">
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="column" style="background-color:#aaa;">
+          <h3>Athletic</h3>
+              <div id="AM_Class_Athletic_JS">
+              </div>
+        </div>
+        <div class="column" style="background-color:#bbb;">
+          <h3>Academic/Creative</h3>
+          <div id="PM_Class_Academic_Creative_JS">
+          </div>
+        </div>
+      </div>
+
+
+              Selection
+              <div class="row">
+                <div class="column" id = 'column-select' >
+
+                  <label for="AM"> Choose an AM class:</label>
+                  <select name="AM_class" id="AM_select">
+                    <!-- <option value='blank'> </option> -->
+
+                    <!-- {% for course in classes %}
+                      {% if course.1 == 'AM' %}
+
+                      <option value={course.0}>{{course.0}}</option>
+                      {% endif %}
+                    {% endfor %} -->
+
+                  </select>
+
+                </div>
+
+                <div class="column" id = 'column-select' >
+                  <label for="PM">Choose an PM class:</label>
+                  <select name="PM_class" id="PM_select">
+                    <!-- {% for course in classes %}
+                      {% if course.1 == 'PM' %}
+
+                      <option value={course.0}>{{course.0}}</option>
+                      {% endif %}
+                    {% endfor %} -->
+                  </select>
+                </div>
+              </div>
+    <div class="container">
+
+      AM Class
+      {{ signup.class_AM}}
+
+      PM Class
+      {{ signup.class_PM}}
+    </div>
+
+          <button class= "btn btn-secondary" name="button"> Create </button>
+      </form>
+</div>
+
+  </body>
+
+  <script type="text/javascript">
+
+       // var s = document.getElementsByName('AM_class')[0];
+       // console.log(s);
+       //
+       // var text = s.options[s.selectedIndex].text;
+       // console.log(text);
+       // document.getElementById('AM_class').value = text;
+       // document.getElementById('PM_class').value = text;
+
+       document.getElementById('AM_select').onchange = function() {
+
+         // console.log(document.getElementById('AM_class').text);
+         var am = document.getElementById('AM_select');
+         var am_result =am.options[am.selectedIndex].text;
+         // var result = e.value;
+         console.log(am_result);
+
+         // document.getElementById('selected_am_class').value = result;
+         document.getElementById('id_signup-class_AM').value = am_result;
+
+         // document.getElementById("id_class_AM").value = "developer";
+         // document.getElementById('am_class').value = result;
+         // my_form.am_class.value = am_result;
+       }
+       document.getElementById('PM_select').onchange = function() {
+
+         // console.log(document.getElementById('AM_class').text);
+         var pm = document.getElementById('PM_select');
+         var pm_result = pm.options[pm.selectedIndex].text;
+         // var result = e.value;
+         console.log(pm_result);
+
+         // document.getElementById('selected_am_class').value = result;
+         document.getElementById('id_signup-class_PM').value = pm_result;
+
+         // document.getElementById("id_class_AM").value = "developer";
+         // document.getElementById('am_class').value = result;
+         // my_form.am_class.value = am_result;
+       }
+       document.getElementById('id_primary-age').onchange = function(){
+         var age = document.getElementById('id_primary-age').value;
+         var classes_instock = [];
+
+
+         var myVar = document.getElementById("myVar");
+
+
+         var info = myVar.value;
+         info = info.substring(1);
+         info = info.substring(0, info.length - 1);
+
+
+         var regExp = /\(([^)]+)\)/g;
+         const array = [...info.matchAll(regExp)];
+         var matches = regExp.exec(info);
+
+
+
+         var eligible_classes = [];
+
+
+         for (const each in array){
+           individual = array[each][1];
+           name = individual.split(',')[0];
+
+           category = individual.split(',')[3];
+           console.log(name);
+           console.log( category);
+
+
+           if (category == " 'AY'"){
+
+             eligible_classes.push( array[each]);
+           }
+           if(age <=10 && category == " 'YY'"){
+             eligible_classes.push( array[each]);
+           }
+           if(age >=10 && category == " 'OY'"){
+             eligible_classes.push( array[each]);
+           }
+
+         }
+         function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for(i = L; i >= 0; i--) {
+               selectElement.remove(i);
+            }
+         }
+
+         removeOptions(document.getElementById("AM_select"));
+         removeOptions(document.getElementById("PM_select"));
+
+
+         console.log(eligible_classes);
+         document.getElementById('AM_Class_Academic_Creative_JS').innerHTML = "";
+         document.getElementById('AM_Class_Athletic_JS').innerHTML = "";
+         document.getElementById('PM_Class_Academic_Creative_JS').innerHTML = "";
+         document.getElementById('PM_Class_Athletic_JS').innerHTML = "";
+
+         var u1_am_academic_creative = document.createElement('u1');
+         document.getElementById('AM_Class_Academic_Creative_JS').append(u1_am_academic_creative);
+         var u1_am_athletic = document.createElement('u1');
+         document.getElementById('AM_Class_Athletic_JS').append(u1_am_athletic);
+         var u1_pm_academic_creative = document.createElement('u1');
+         document.getElementById('PM_Class_Academic_Creative_JS').append(u1_pm_academic_creative);
+         var u1_pm_athletic = document.createElement('u1');
+         document.getElementById('PM_Class_Athletic_JS').append(u1_pm_athletic);
+
+         // Grab Selectors
+         var am_select = document.getElementById("AM_select");
+         var am_option = document.createElement("option");
+         am_option.text = '';
+         am_select.add(am_option)
+         var pm_select = document.getElementById("PM_select");
+         var pm_option = document.createElement("option");
+         pm_option.text = '';
+         pm_select.add(pm_option);
+
+
+         eligible_classes.forEach(function(each) {
+
+           var info = each[1].split(',');
+           var li_am_academic_creative = document.createElement('li');
+           var li_am_athletic = document.createElement('li');
+           var li_pm_academic_creative = document.createElement('li');
+           var li_pm_athletic = document.createElement('li');
+           if ( info[1] == " 'AM'" && (info[2] == " 'Academic'" || info[2] == " 'Creative'" )){
+             console.log('Creative/Academic AM');
+             console.log(each);
+             u1_am_academic_creative.appendChild(li_am_academic_creative);
+
+             li_am_academic_creative.innerHTML += info[0].slice(1,-1);
+             var am_option = document.createElement("option");
+              am_option.text = info[0].slice(1,-1);
+              am_select.add(am_option);
+
+           }
+           if ( info[1] == " 'AM'" && info[2] == " 'Athletic'"){
+             console.log('Athletic AM');
+             console.log(each);
+             u1_am_athletic.appendChild(li_am_athletic);
+             li_am_athletic.innerHTML += info[0].slice(1,-1);
+             var am_option = document.createElement("option");
+             am_option.text = info[0].slice(1,-1);
+             am_select.add(am_option);
+           }
+
+           if ( info[1] == " 'PM'" && (info[2] == " 'Academic'" || info[2] == " 'Creative'" )){
+             console.log('Creative/Academic PM');
+             console.log(each);
+             u1_pm_academic_creative.appendChild(li_pm_academic_creative);
+             li_pm_academic_creative.innerHTML += info[0].slice(1,-1);
+             var pm_option = document.createElement("option");
+             pm_option.text = info[0].slice(1,-1);
+             pm_select.add(pm_option);
+           }
+           if ( info[1] == " 'PM'" && info[2] == " 'Athletic'"){
+             console.log('Athletic PM');
+             console.log(each);
+             u1_pm_athletic.appendChild(li_pm_athletic);
+             li_pm_athletic.innerHTML += info[0].slice(1,-1);
+             var pm_option = document.createElement("option");
+             pm_option.text = info[0].slice(1,-1);
+             pm_select.add(pm_option);
+           }
+         });
+
+         // Send results to AM and Select
+       }
+
+
+       // function myNewFunction(sel) {
+       //   alert(sel.options[sel.selectedIndex].text);
+       //   console.log(sel.options[sel.selectedIndex].text);
+       // }
+
+
+     </script>
+
+</html>
